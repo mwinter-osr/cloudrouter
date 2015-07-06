@@ -43,8 +43,10 @@ cmake .. -DDISABLE_PF_RING_SUPPORT=ON
 make
 
 %install
+# modify systemd file for Fedora compliance
+sed 's/\/opt\/fastnetmon\/fastnetmon/\/usr\/sbin\/fastnetmon/' src/fastnetmon.service > src/fastnetmon.service.patched
 # install init script
-install -p -D -m 0755 src/fastnetmon.service %{buildroot}%{_sysconfdir}/systemd/system/fastnetmon.service
+install -p -D -m 0755 src/fastnetmon.service.patched %{buildroot}%{_sysconfdir}/systemd/system/fastnetmon.service
 
 # install daemon binary file
 install -p -D -m 0755 src/build/fastnetmon %{buildroot}%{_sbindir}/fastnetmon
